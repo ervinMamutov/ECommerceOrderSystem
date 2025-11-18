@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Include Spring Boot's default configuration -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- Properties -->
+    <property name="LOG_FILE" value="${LOG_FILE:-logs/ecommerce}"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <!-- Console Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- File Appender for all logs -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Error File Appender - separate file for errors -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}-error.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}-error-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Async Appender for better performance -->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="FILE"/>
+    </appender>
+
+    <!-- ========================================== -->
+    <!-- Development Profile -->
+    <!-- ========================================== -->
+    <springProfile name="dev">
+        <!-- Application logs at DEBUG level -->
+        <logger name="com.example.e_commerce" level="DEBUG"/>
+
+        <!-- Show SQL queries -->
+        <logger name="org.hibernate.SQL" level="DEBUG"/>
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+
+        <!-- Spring framework at INFO -->
+        <logger name="org.springframework" level="INFO"/>
+        <logger name="org.springframework.web" level="DEBUG"/>
+
+        <!-- Root logger configuration -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- ========================================== -->
+    <!-- Production Profile -->
+    <!-- ========================================== -->
+    <springProfile name="prod">
+        <!-- Application logs at INFO level -->
+        <logger name="com.example.e_commerce" level="INFO"/>
+
+        <!-- Hide SQL queries in production -->
+        <logger name="org.hibernate.SQL" level="WARN"/>
+
+        <!-- Spring framework at WARN -->
+        <logger name="org.springframework" level="WARN"/>
+
+        <!-- Database connection pool logging -->
+        <logger name="com.zaxxer.hikari" level="WARN"/>
+
+        <!-- Root logger configuration -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="ASYNC_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+    </springProfile>
+
+    <!-- ========================================== -->
+    <!-- Test Profile -->
+    <!-- ========================================== -->
+    <springProfile name="test">
+        <!-- Keep test logs minimal -->
+        <logger name="com.example.e_commerce" level="INFO"/>
+
+        <!-- Hide SQL and Spring logs during tests -->
+        <logger name="org.hibernate" level="WARN"/>
+        <logger name="org.springframework" level="WARN"/>
+        <logger name="org.springframework.test" level="INFO"/>
+
+        <!-- Root logger configuration -->
+        <root level="WARN">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- ========================================== -->
+    <!-- Third-party Library Logging Levels -->
+    <!-- ========================================== -->
+
+    <!-- Reduce noise from common libraries -->
+    <logger name="org.apache.catalina" level="WARN"/>
+    <logger name="org.apache.coyote" level="WARN"/>
+    <logger name="org.apache.tomcat" level="WARN"/>
+    <logger name="org.postgresql" level="WARN"/>
+    <logger name="com.zaxxer.hikari" level="WARN"/>
+
+    <!-- Jackson JSON processing -->
+    <logger name="com.fasterxml.jackson" level="WARN"/>
+
+    <!-- Flyway database migrations -->
+    <logger name="org.flywaydb" level="INFO"/>
+
+</configuration>
