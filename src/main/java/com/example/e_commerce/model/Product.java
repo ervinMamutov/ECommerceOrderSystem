@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name="products")
+@Table(name = "products")
 public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +16,12 @@ public class Product {
 
   @NotBlank(message = "Product name cannot be blank")
   @Size(min = 3, max = 200,
-  message = "Product name must be between 3 and 200 characters")
+          message = "Product name must be between 3 and 200 characters")
   private String name;
 
   @NotBlank(message = "Description cannot be blank")
   @Size(min = 3, max = 2000,
-  message = "Description must be between 3 and 2000 characters")
+          message = "Description must be between 3 and 2000 characters")
   private String description;
 
   @NotNull(message = "Price cannot be null")
@@ -38,12 +38,12 @@ public class Product {
   @Column(unique = true, length = 50)
   private String sku;
 
- @NotBlank(message = "Category cannot be blank")
- @Size(min = 3, max = 100,
- message = "Category must be between 3 and 100 characters")
+  @NotBlank(message = "Category cannot be blank")
+  @Size(min = 3, max = 100,
+          message = "Category must be between 3 and 100 characters")
   private String category;
 
- @Column(nullable = false, columnDefinition = "boolean default true")
+  @Column(nullable = false, columnDefinition = "boolean default true")
   private boolean active;
 
   @Column(nullable = false, updatable = false)
@@ -52,10 +52,12 @@ public class Product {
   @Column(nullable = false)
   private LocalDateTime updatedAt;
 
-  public Product() {}
+  public Product() {
+  }
 
   public Product(String name, String description, BigDecimal price,
-                 int stockQuantity, String sku, String category, boolean active) {
+                 int stockQuantity, String sku, String category,
+                 boolean active) {
     this.name = name;
     this.description = description;
     this.price = price;
@@ -158,21 +160,15 @@ public class Product {
 
   @Override
   public String toString() {
-    return "Product{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", price=" + price +
-            ", stock=" + stockQuantity +
-            ", sku=" + sku + '\'' +
-            " active+" + active +
-            "}";
+    return "Product{" + "id=" + id + ", name='" + name + '\'' + ", price=" +
+            price + ", stock=" + stockQuantity + ", sku=" + sku + '\'' +
+            " active=" + active + "}";
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if(!(o instanceof Product)) return false;
-    Product product = (Product) o;
+    if (!(o instanceof Product product)) return false;
     return Objects.equals(id, product.id);
   }
 
