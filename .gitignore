@@ -44,5 +44,7 @@ build/
 ### VS Code ###
 .vscode/
 
-### Claude Code Conversation Logs ###
+### Claude Code ###
+CLAUDE.md
 .claude/conversations/
+docs/summaries/
