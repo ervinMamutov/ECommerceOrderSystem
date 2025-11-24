@@ -133,7 +133,7 @@ public class ProductTest {
 
   @Test
   @DisplayName("Should have correct toString format")
-  void shouldHaveCorrectToStringFomat() {
+  void shouldHaveCorrectToStringFormat() {
     Product product = new Product();
     product.setId(1L);
     product.setName("Test Product");
