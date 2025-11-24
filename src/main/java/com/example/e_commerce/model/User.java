@@ -1,5 +1,6 @@
 package com.example.e_commerce.model;
 
+import com.example.e_commerce.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
