@@ -26,19 +26,20 @@ public class User {
   @Column(nullable = false)
   private String passwordHash;
 
-  @NotBlank(message = "Name cannot be blank")
+  @NotBlank(message = "First name cannot be blank")
   @Size(min = 3, max = 100,
-  message = "Name must be between 3 and 100 characters")
+          message = "First name must be between 3 and 100 characters")
   private String firstName;
 
   @NotBlank(message = "Last name cannot be blank")
   @Size(min = 3, max = 100,
-  message = "Last name must be between 3 and 100 characters")
+          message = "Last name must be between 3 and 100 characters")
   private String lastName;
 
   @Enumerated(EnumType.STRING)
   private UserRole role;
 
+  @Size(max = 20, message = "Phone number must be less than 20 numbers")
   @Column(length = 20)
   private String phoneNumber;
 
@@ -60,10 +61,12 @@ public class User {
   @Column(nullable = false)
   private LocalDateTime lastLoginAt;
 
-  public User() {}
+  public User() {
+  }
 
-  public User(String email, String passwordHash, String firstName,
-              String lastName, String phoneNumber, UserRole role, boolean active) {
+  public User(String firstName, String lastName, String email,
+              String phoneNumber, String passwordHash, UserRole role,
+              boolean active) {
     this.email = email;
     this.passwordHash = passwordHash;
     this.firstName = firstName;
@@ -73,7 +76,7 @@ public class User {
     this.active = active;
   }
 
-  public  Long getId() {
+  public Long getId() {
     return id;
   }
 
@@ -81,7 +84,7 @@ public class User {
     this.id = id;
   }
 
-  public  String getEmail() {
+  public String getEmail() {
     return email;
   }
 
@@ -89,7 +92,7 @@ public class User {
     this.email = email;
   }
 
-  public  String getPasswordHash() {
+  public String getPasswordHash() {
     return passwordHash;
   }
 
@@ -97,7 +100,7 @@ public class User {
     this.passwordHash = passwordHash;
   }
 
-  public  String getFirstName() {
+  public String getFirstName() {
     return firstName;
   }
 
@@ -105,7 +108,7 @@ public class User {
     this.firstName = firstName;
   }
 
-  public  String getLastName() {
+  public String getLastName() {
     return lastName;
   }
 
@@ -113,7 +116,7 @@ public class User {
     this.lastName = lastName;
   }
 
-  public  String getPhoneNumber() {
+  public String getPhoneNumber() {
     return phoneNumber;
   }
 
@@ -121,7 +124,7 @@ public class User {
     this.phoneNumber = phoneNumber;
   }
 
-  public  UserRole getRole() {
+  public UserRole getRole() {
     return role;
   }
 
@@ -129,7 +132,7 @@ public class User {
     this.role = role;
   }
 
-  public  List<Order> getOrders() {
+  public List<Order> getOrders() {
     return orders;
   }
 
@@ -137,16 +140,15 @@ public class User {
     this.orders = orders;
   }
 
-  public  List<Address> getAddresses() {
+  public List<Address> getAddresses() {
     return addresses;
   }
 
-  public void setAddresses(
-          List<Address> addresses) {
+  public void setAddresses(List<Address> addresses) {
     this.addresses = addresses;
   }
 
-  public  Cart getCart() {
+  public Cart getCart() {
     return cart;
   }
 
@@ -155,14 +157,14 @@ public class User {
   }
 
   public boolean isActive() {
-    return  active;
+    return active;
   }
 
   public void setActive(boolean active) {
     this.active = active;
   }
 
-  public  LocalDateTime getCreatedAt() {
+  public LocalDateTime getCreatedAt() {
     return createdAt;
   }
 
@@ -170,7 +172,7 @@ public class User {
     this.createdAt = createdAt;
   }
 
-  public  LocalDateTime getLastLoginAt() {
+  public LocalDateTime getLastLoginAt() {
     return lastLoginAt;
   }
 
@@ -186,22 +188,17 @@ public class User {
 
   @Override
   public String toString() {
-    return "User{id=" + id +
-            ", First Name=" + firstName + '\'' +
-            ", Last Name=" + lastName + '\'' +
-            ", email=" + email + '\'' +
-            ", phoneNumber=" + phoneNumber + '\'' +
-            ", role=" + role +
-            ", createdAt=" + createdAt +
-            ", lastLoginAt=" + lastLoginAt +
-            ", active=" + active +
-            "}";
+    return "User{id=" + id + ", First Name=" + firstName + '\'' +
+            ", Last Name=" + lastName + '\'' + ", email=" + email + '\'' +
+            ", phoneNumber=" + phoneNumber + '\'' + ", role=" + role +
+            ", createdAt=" + createdAt + ", lastLoginAt=" + lastLoginAt +
+            ", active=" + active + "}";
   }
 
   @Override
   public boolean equals(Object o) {
-    if(this == o) return true;
-    if(!(o instanceof User user)) return false;
+    if (this == o) return true;
+    if (!(o instanceof User user)) return false;
     return Objects.equals(id, user.id);
   }
 
