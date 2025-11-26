@@ -37,9 +37,9 @@ public class Address {
           message = "State must be between 3 and 200 characters")
   private String state;
 
-  @NotBlank(message = "Post code cannot be blank")
+  @NotBlank(message = "PostalCode cannot be blank")
   @Size(min = 3, max = 10,
-          message = "Post code must be between 3 and 10 characters")
+          message = "PostalCode must be between 3 and 10 characters")
   private String postalCode;
 
   @NotBlank(message = "Country cannot be blank")
